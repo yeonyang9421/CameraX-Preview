@@ -49,7 +49,7 @@ class MainActivity : BaseActivity() {
             .build()
 
         val cameraSelector: CameraSelector = CameraSelector.Builder()
-            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+            .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
             .build()
 
         camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)

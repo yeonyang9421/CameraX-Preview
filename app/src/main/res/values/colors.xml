@@ -2,5 +2,18 @@
 <resources>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+
+    <color name="primaryColor">#ffffff</color>
+    <color name="primaryColorDark">@android:color/black</color>
+    <color name="colorAccent">#f55f31</color>
+    <color name="color_ffffff">#ffffff</color>
+    <color name="color_000000">#000000</color>
+    <color name="color_2a2a2a">#2a2a2a</color>
+    <color name="color_47494e">#47494e</color>
+    <color name="color_47d966">#47d966</color>
+    <color name="color_20201f">#20201f</color>
+    <color name="color_171719">#171719</color>
+    <color name="color_808080">#808080</color>
+    <color name="color_aaaaaa">#aaaaaa</color>
+    <color name="color_1a1a1a">#1a1a1a</color>
 </resources>
