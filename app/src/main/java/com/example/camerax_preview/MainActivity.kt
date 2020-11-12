@@ -2,6 +2,8 @@ package com.example.camerax_preview
 
 import android.Manifest
 import android.os.Bundle
+import android.util.Log
+import android.util.Size
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
@@ -14,8 +16,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
 class MainActivity : BaseActivity() {
+    private var lensFacing = CameraSelector.LENS_FACING_BACK
     private var camera: Camera? = null
     private var imageCapture: ImageCapture? = null
+    private var cameraProvider: ProcessCameraProvider? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,12 +40,40 @@ class MainActivity : BaseActivity() {
     private fun setupCameraProvider() {
         ProcessCameraProvider.getInstance(this).also { provider ->
             provider.addListener(Runnable {
-                bindPreview(provider.get())
+//                indPreview(provider.get())
+                cameraProvider = provider.get()
+                bindCamera()
             }, ContextCompat.getMainExecutor(this))
+        }
+
+        if(lensFacing==CameraSelector.LENS_FACING_BACK){
+            lensFacing=CameraSelector.LENS_FACING_FRONT
+            cameraProvider?.unbindAll()
+            bindCamera()
         }
     }
 
+    private fun bindCamera() {
+        val preview: Preview = Preview.Builder()
+            .build()
+        val cameraSelector = createCameraSelector()
+        imageCapture = createCameraCapture()
+        camera = cameraProvider?.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+        camera?.let { camera ->
+            preview.setSurfaceProvider(previewView.createSurfaceProvider(camera.cameraInfo))
+        }
+    }
+
+    private fun createCameraCapture(): ImageCapture = ImageCapture.Builder()
+        .setTargetResolution(Size(1200, 1200))
+        .build()
+
+    private fun createCameraSelector(): CameraSelector = CameraSelector.Builder()
+        .requireLensFacing(lensFacing)
+        .build()
+
     private fun bindPreview(cameraProvider: ProcessCameraProvider) {
+        Log.d("MainActivity", "bindPreview: ")
         val preview: Preview = Preview.Builder()
             .build()
 
@@ -56,6 +88,13 @@ class MainActivity : BaseActivity() {
         camera?.let { camera ->
             preview.setSurfaceProvider(previewView.createSurfaceProvider(camera.cameraInfo))
         }
+    }
+
+    private fun cameraSelector(): CameraSelector {
+        val cameraSelector: CameraSelector = CameraSelector.Builder()
+            .requireLensFacing(lensFacing)
+            .build()
+        return cameraSelector
     }
 
 //    private fun onCaptureImage() {
